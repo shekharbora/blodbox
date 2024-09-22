@@ -1,0 +1,14 @@
+development:
+  adapter: redis
+  url: "redis://default:m5cMQKrALN48oefSRZ4PYVVuI1B2bAx9@redis-13332.c270.us-east-1-3.ec2.cloud.redislabs.com:13332"
+
+test:
+  adapter: test
+
+production:
+  adapter: redis
+  url: "redis://default:m5cMQKrALN48oefSRZ4PYVVuI1B2bAx9@redis-13332.c270.us-east-1-3.ec2.cloud.redislabs.com:13332"
+
+
+
+

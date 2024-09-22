@@ -1,0 +1,43 @@
+ <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Devices Request</h1>
+  
+</div>
+
+ <div class="card shadow mb-4 mt-4">
+      <!-- Card Header - Dropdown -->
+      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Your Devices</h6>
+      </div>
+      <!-- Card Body -->
+      <div class="card-body overflow-auto" >
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Device Code</th>
+                <th scope="col">Message</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%@requests.each do |r|%>
+                <tr>
+                  <td><%= r.device.code%></td>
+                  <td><%= r.message%></td>
+                  <td><% if r.is_assigne%>
+                      Already Assigned
+                    <%else%>
+                      <%=link_to "Assign Patient",new_patient_path(request_id: r.id)%>
+                    <%end%>
+                    </td>
+                </tr>
+              <%end%>
+            </tbody>
+          </table>
+          <div class="digg_pagination float-end">
+            <%#= will_paginate @requests, :container => false %>
+            <%= paginate @requests %>
+          </div>
+        </div>
+      </div>
+    </div>

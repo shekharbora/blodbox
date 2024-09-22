@@ -1,0 +1,210 @@
+<div id="user_dashboard" class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" data-user-id= "<%=current_user.id%>">
+  <h1 class="h2">Dashboard</h1>
+  
+</div>
+<div class="row">
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                      Device count</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-300" ><%= @decive_count%></div>
+                </div>
+                <div class="col-auto">
+                  <%= feather_icon "cpu",size: 50, class: "align-text-bottom fa-2x text-gray-300", aria: { label: "Your Devices" } %>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-body-secondary">
+          <a href="/devices" class="text-decoration-none link-dark">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">Device(s)</div>
+              <div class="col-auto">
+                <%= feather_icon "arrow-right", class: "align-text-right fa-2x text-gray-300", aria: { label: "Your Devices" } %>
+              </div>
+            </div>
+          </a>
+        </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                   <%= pie_chart @device_status, donut: true,legend: 'right', width: "180px", height: "90px" %>
+                </div>
+                <div class="col-auto">
+                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-body-secondary">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">Device Status</div>
+            <div class="col-auto">
+              <%= feather_icon "arrow-right", class: "align-text-right fa-2x text-gray-300", aria: { label: "Your Devices" } %>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                      Notifications</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800" data-controller="notification" data-user-id = "<%= current_user.id %>" id="notification-box"><spna class="notification-count"><%= @notification %></spna></div>
+              </div>
+              <div class="col-auto">
+                  <%= feather_icon "bell",size: 50, class: "align-text-right fa-2x text-gray-300", aria: { label: "Your Devices" } %>
+              </div>
+          </div>
+        </div>
+        <div class="card-footer text-body-secondary">
+          <a href="/notifications" class="text-decoration-none link-dark">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">View More</div>
+              <div class="col-auto">
+                <%= feather_icon "arrow-right", class: "align-text-right fa-2x text-gray-300", aria: { label: "Your Devices" } %>
+              </div>
+            </div>
+          </a>
+        </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                      Device Request</div>
+                  <div data-controller="device-request" class="h5 mb-0 font-weight-bold text-gray-800"><span class="request-count"><%= @device_request%></span></div>
+              </div>
+              <div class="col-auto">
+                  <%= feather_icon "mail",size: 50, class: "align-text-right fa-2x text-gray-300", aria: { label: "Your Devices" } %>
+              </div>
+          </div>
+        </div>
+        <div class="card-footer text-body-secondary">
+          <a href="/device_requests" class="text-decoration-none link-dark">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">View More</div>
+              <div class="col-auto">
+                <%= feather_icon "arrow-right", class: "align-text-right fa-2x text-gray-300", aria: { label: "Your Devices" } %>
+              </div>
+            </div>
+          </a>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" data-controller="feed">
+  <div class="col-xl-7 col-lg-7">
+    <div class="card shadow mb-4" style="min-height: 385px;max-height: 40px;">
+      <!-- Card Header - Dropdown -->
+      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Temperature</h6>
+      </div>
+      <!-- Card Body -->
+      <div class="card-body">
+          <div class="chart-area"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+              <%= line_chart @tmp, download: true, class: "my-4 w-100", id: "temperature-chart"%>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-5 col-lg-5">
+    <div class="card shadow mb-4" style="min-height: 385px;max-height: 40px;">
+      <!-- Card Header - Dropdown -->
+      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Device Feed</h6>
+      </div>
+      <!-- Card Body -->
+      <div class="card-body overflow-auto device-feed-box" >
+        <% @feed.each do |f|%>
+          <div class="list-group w-auto mb-2">
+            <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true" title="<%= f.device.code%>">
+              <%= feather_icon "cpu",size: 30, class: "align-text-right fa-2x text-gray-300", aria: { label: "Your Devices" } %>
+              <div class="d-flex gap-2 w-100 justify-content-between">
+                <div>
+                  <h6 class="mb-0">****<%= f.device.code.last(4)%></h6>
+                  <p class="mb-0 opacity-75">Device is <b><%= f.status%></b>.</p>
+                </div>
+                <div>
+                  <p><%= feather_icon "thermometer",size: 20, class: "align-text-right fa-2x text-gray-300"%><span><%= f.temperature.to_f%></span>  | <%= feather_icon "package",size: 20, class: "align-text-right fa-2x text-gray-300" %><span> <%= f.weight.to_f.to_f%></span></p>
+                </div>
+                <small class="opacity-50 text-nowrap"><%=  time_ago_in_words(f.created_at) %> ago</small>
+              </div>
+            </a>
+          </div>
+        <%end%>
+      </div>  
+      <div class="card-footer text-center">
+        <a href="/feeds" class="text-decoration-none link-dark">View All Feed</a>
+     </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-7 col-lg-7">
+    <div class="card shadow mb-4" style="min-height: 385px;max-height: 40px;">
+      <!-- Card Header - Dropdown -->
+      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Weight</h6>
+      </div>
+      <!-- Card Body -->
+      <div class="card-body">
+          <div class="chart-area"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+              <%= line_chart @weight, download: true, class: "my-4 w-100", id: "weight-chart"%>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-5 col-lg-5">
+    <div class="card shadow mb-4" style="min-height: 385px;max-height: 40px;">
+      <!-- Card Header - Dropdown -->
+      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Your Devices</h6>
+      </div>
+      <!-- Card Body -->
+      <div class="card-body overflow-auto" >
+        <div class="table-responsive">
+          <table class="table table-striped table-sm">
+            <thead>
+              <tr>
+                <th scope="col">Code</th>
+                <th scope="col">Mx. Temperature</th>
+                <th scope="col">Mx. Weight</th>
+                <th scope="col">Name </th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @user_devices.each do |ud|%>
+              <tr>
+                <td title="<%= ud.code%>">****<%= ud.code.last(5)%></td>
+                <td><%= ud.device_info.max_temperature%></td>
+                <td><%= ud.device_info.max_weight%></td>
+                <td><%= "xyz"%></td>
+              </tr>
+              <%end%>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%#= content_tag :div,"", data:{
+  controller: "feed"
+}%>
+  

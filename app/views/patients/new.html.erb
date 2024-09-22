@@ -1,0 +1,71 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Patients</h1>
+  
+</div>
+<div class="card shadow mb-4 mt-4">
+  <!-- Card Header - Dropdown -->
+  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+      <h6 class="m-0 font-weight-bold text-primary">Edit Patients</h6>
+  </div>
+  <!-- Card Body -->
+  <div class="card-body overflow-auto" >
+    <%= form_with(model: @patient) do |form| %>
+      <% if @patient.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@patient.errors.count, "error") %> prohibited this patient from being saved:</h2>
+
+          <ul>
+            <% @patient.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="field mb-3">
+        <%= form.label :device %>
+        <%= form.select :device_id, @devices.collect{|p| [ p.code, p.id ] }, { :prompt => 'Select Device'},class: "form-control form-control" %>
+
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Gender</label>
+       <%= form.select :gender,["male","female"], { :prompt => 'Select Device'},class: "form-control form-control" %>
+      </div>
+
+      <div class="field mb-3">
+        <%= form.label :name %>
+        <%= form.text_field :name, class: "form-control form-control"%>
+      </div>
+
+      <div class="field mb-3">
+        <%= form.label :location %>
+        <%= form.text_field :location,class: "form-control form-control" %>
+      </div>
+
+      <div class="field mb-3">
+        <%= form.label :address %>
+        <%= form.text_field :address,class: "form-control form-control" %>
+      </div>
+      <div class="field mb-3">
+        <%= form.label :age %>
+        <%= form.text_field :age,class: "form-control form-control" %>
+      </div>
+      <div class="field mb-3">
+        <%= form.label :dob %>
+        <%= form.date_field :dob,class: "form-control form-control" %>
+      </div>
+      <div class="field mb-3">
+        <%= form.label "Blod Group" %>
+        <%= form.select :blod_group,["AB","A+","B","AB","A+","B+"], { :prompt => 'Select group'},class: "form-control form-control" %>      
+      </div>
+
+      <%= form.hidden_field :hospital_id, value: current_user.hospital.id %>
+      <%= form.hidden_field :request_id, value: params[:request_id] %>
+
+
+      <div class="actions">
+        <%= form.submit 'Save patient info', class: "btn btn-success mt-2 col-md-3 " %>
+      </div>
+    <% end %>
+  </div>
+</div>

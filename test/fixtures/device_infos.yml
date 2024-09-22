@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  mfg_date: 2023-07-29
+  mode_name: MyString
+  setting: MyString
+
+two:
+  mfg_date: 2023-07-29
+  mode_name: MyString
+  setting: MyString

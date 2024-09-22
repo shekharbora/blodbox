@@ -1,0 +1,32 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Notifications</h1>
+  
+</div>
+
+ <div class="card shadow mb-4 mt-4">
+  <!-- Card Header - Dropdown -->
+  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+      <h6 class="m-0 font-weight-bold text-primary">Device Alerts! | Notifications</h6>
+  </div>
+  <!-- Card Body -->
+  <div class="card-body overflow-auto" >
+    <% @notification.each do |f|%>
+      <div class="list-group w-auto mb-2">
+        <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true" title="<%= f.device.code%>">
+          <%= feather_icon "cpu",size: 30, class: "align-text-right fa-2x text-gray-300", aria: { label: "Your Devices" } %>
+          <div class="d-flex gap-2 w-100 justify-content-between">
+            <div>
+              <h6 class="mb-0"><%= f.device.code%></h6>
+              <p class="mb-0 opacity-75"><%= f.message%></b>.</p>
+            </div>
+            <small class="opacity-50 text-nowrap"><%=  time_ago_in_words(f.created_at) %> ago</small>
+          </div>
+        </a>
+      </div>
+    <%end%>
+    <div class="digg_pagination float-end">
+     
+      <%= paginate @notification %>
+    </div>
+  </div>
+</div>

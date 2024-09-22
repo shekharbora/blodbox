@@ -1,0 +1,50 @@
+<nav id="sidebarMenu" class="col-md-3 mt-4 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3 sidebar-sticky">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" href="/">
+              <!-- <span data-feather="home" class="align-text-bottom"></span> -->
+              <%= feather_icon "airplay",size: 20, class: "align-text-bottom", aria: { label: "User activity" } %>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/devices">
+              <!-- <span data-feather="file" class="align-text-bottom"></span> -->
+               <%= feather_icon "cpu",size: 20, class: "align-text-bottom", aria: { label: "Your Devices" } %>
+              Devices
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/feeds">
+               <%= feather_icon "activity",size: 20, class: "align-text-bottom", aria: { label: "Device Health" } %>
+              Device Health
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/device_requests">
+               <%= feather_icon "mail",size: 20, class: "align-text-bottom", aria: { label: "Device Health" } %>
+              Device Request
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+             <%= feather_icon "file",size: 20, class: "align-text-bottom", aria: { label: "Reports" } %>
+              Reports
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/patients">
+             <%= feather_icon "user-plus",size: 20, class: "align-text-bottom", aria: { label: "Reports" } %>
+              Patients
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/notifications">
+             <%= feather_icon "alert-triangle",size: 20, class: "align-text-bottom", aria: { label: "Reports" } %>
+              Alerts
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>

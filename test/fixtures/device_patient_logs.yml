@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  event: 1
+  password: MyString
+  temperature: 9.99
+  wight: 9.99
+  lock: 1
+  status: 1
+  patient: one
+  device: one
+
+two:
+  event: 1
+  password: MyString
+  temperature: 9.99
+  wight: 9.99
+  lock: 1
+  status: 1
+  patient: two
+  device: two

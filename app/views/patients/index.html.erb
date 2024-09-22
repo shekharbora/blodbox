@@ -1,0 +1,48 @@
+ <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Patients</h1>
+  
+</div>
+
+ <div class="card shadow mb-4 mt-4">
+  <!-- Card Header - Dropdown -->
+  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+      <h6 class="m-0 font-weight-bold text-primary">Patients List</h6>
+  </div>
+  <!-- Card Body -->
+  <div class="card-body overflow-auto" >
+    <% if @patients.present?%>
+      <div class="table-responsive">
+          <table class="table table-striped ">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Address</th>
+                <th scope="col">Age</th>
+                <th scope="col">Gender </th>
+                <th scope="col">DOB </th>
+                <th scope="col">Blood Group</th>
+                <th scope="col">Device</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <% @patients.each do |p|%>
+              <tr>
+                <td title=""><%= p.name%></td>
+                <td><%= p.address%></td>
+                <td><%= p.age %></td>
+                <td><%= p.gender%></td>
+                <td><%= p.dob%></td>
+                <td><%= p.blod_group%></td>
+                <td><%= p.device.code%></td>
+              </tr>
+              <%end%>
+            </tbody>
+          </table>
+        </div>
+        <div class="digg_pagination float-end">
+          <%= paginate @patients %>
+        </div>
+    <%end%>
+  </div>
+</div>
