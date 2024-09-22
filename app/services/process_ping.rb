@@ -1,79 +1,86 @@
 class ProcessPing
 
-	def initialize(params)
-		@params = params.as_json
-		@device = find_device @params["device_id"]
-	end
+  def initialize(params)
+    @params = params.as_json
+    @device = find_device(@params["device_id"])
+  end
 
-	def process
-		Rails.logger.info "========= #{@params} ========="
-		send(@params["event"].to_sym)
-	end
+  def process
+    Rails.logger.info "Processing event: #{@params['event']} with params: #{@params.inspect}"
+    if respond_to?(@params["event"].to_sym, true)
+      send(@params["event"].to_sym)
+    else
+      Rails.logger.error "Unsupported event: #{@params['event']}"
+    end
+  end
 
-	def assign
-		unless @device&.device_patients&.last&.inprogress?
-			DeviceRequest.create(device_id: @device.id, message: "Device Request to Add Patient!")
-		end
-	end
+  private
 
-	def complete
-		_dp = @device.device_patients.where(status: 'inprogress')
-		_dp.each{|dp| dp.update(status: 'complete')}
-	end
+  def assign
+    device_patient = @device&.device_patients&.last
+    unless device_patient&.inprogress?
+      DeviceRequest.create(device_id: @device.id, message: "Device Request to Add Patient!")
+    end
+  end
 
-	def feed
-		Rails.logger.info "========= box_feed event #{@device.as_json} ==========="	
-		
-		if @device.present? && @device.device_patients.inprogress.present?
-			Rails.logger.info "====log created====="
-			_feed = bake_data
-			_dl = DevicePatientLog.create(_feed) if @params["patient_id"].present?
-			send_msg("feed_channel_#{@device&.users&.last&.id}",_feed.merge(feed_data(_dl)))
-			notify _feed
-		end
-	end
+  def complete
+    inprogress_patients = @device.device_patients.where(status: 'inprogress')
+    inprogress_patients.update_all(status: 'complete')
+  end
 
-	def find_device code
-		Device.find_by_code code
-	end
+  def feed
+    Rails.logger.info "Handling box_feed event for device: #{@device&.as_json}"
 
-	def send_msg(channel_name,data)
-    ActionCable.server.broadcast channel_name, data    
+    if @device.present? && @device.device_patients.inprogress.exists?
+      Rails.logger.info "Log created for in-progress patients."
+      feed_data = bake_data
+      if @params["patient_id"].present?
+        device_log = DevicePatientLog.create(feed_data)
+        send_msg("feed_channel_#{@device&.users&.last&.id}", feed_data.merge(format_feed_data(device_log)))
+        notify(feed_data)
+      end
+    else
+      Rails.logger.info "No in-progress patients found for the feed event."
+    end
+  end
+
+  def find_device(code)
+    Device.find_by_code(code)
+  end
+
+  def send_msg(channel_name, data)
+    ActionCable.server.broadcast(channel_name, data)
   end
 
   def bake_data
-  	{
-    	device_id: @device.id,
-	    patient_id: @params["patient_id"],
-	    event: @params["event"],
-	    temperature: @params["temp"],
-	    weight: @params["weight"],
-	    lock: @params["lock_type"],
-	    status: @params["lock_status"]
-  	}
-  	#password: @params["password"],
+    {
+      device_id: @device.id,
+      patient_id: @params["patient_id"],
+      event: @params["event"],
+      temperature: @params["temp"],
+      weight: @params["weight"],
+      lock: @params["lock_type"],
+      status: @params["lock_status"]
+    }
   end
 
-  def feed_data(_dl)
-  	{
-  		device_code: @device.code,
-  		patient_name: @device.patients&.last&.name,
-  		created_at: _dl.created_at.strftime("%FT%T")
-  	}
+  def format_feed_data(device_log)
+    {
+      device_code: @device.code,
+      patient_name: @device.patients&.last&.name,
+      created_at: device_log.created_at.strftime("%FT%T")
+    }
   end
 
-
-  def notify _feed
-  	temperature_threshold = @device&.device_info&.max_temperature.to_f
-    weight_threshold = @device&.device_info&.max_weight.to_f
-
-    if _feed[:temperature].to_f > temperature_threshold 
-    	Notification.create(message: "Temperature exceeded the higher threshold.!! ", device_id: @device.id)
-    end
-    if _feed[:weight].to_f > weight_threshold 
-    	Notification.create(message: "Weight exceeded the higher threshold.!! ", device_id: @device.id)
-    end
+  def notify(feed_data)
+    check_threshold(:temperature, feed_data[:temperature], @device&.device_info&.max_temperature.to_f, "Temperature")
+    check_threshold(:weight, feed_data[:weight], @device&.device_info&.max_weight.to_f, "Weight")
   end
 
+  def check_threshold(type, value, threshold, name)
+    return unless value.to_f > threshold
+
+    Notification.create(message: "#{name} exceeded the higher threshold!", device_id: @device.id)
+  end
 
 end
